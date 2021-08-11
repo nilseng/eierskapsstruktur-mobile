@@ -19,6 +19,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import SearchableDropdown from 'react-native-searchable-dropdown';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {getCompanies} from './services/companyService';
@@ -66,43 +67,98 @@ const App = () => {
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    height: '100%',
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={[backgroundStyle, styles.h100]}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-          }}>
-          <Section title="Selskaper">{companyCount?.toLocaleString()}</Section>
-          <Section title="Aksjonærer">
-            {shareholderCount?.toLocaleString()}
-          </Section>
-          <Section title="Norske aksjer">
-            Søk og finn alle norske aksjer og deres eiere
-          </Section>
-          <View style={styles.sectionContainer}>
-            <TextInput style={styles.textInput} placeholder="Søk her..." />
+      <View>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={[backgroundStyle]}>
+          <View
+            style={{
+              backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+            }}>
+            <Text
+              style={[
+                styles.appTitle,
+                {
+                  color: isDarkMode ? Colors.white : Colors.black,
+                },
+              ]}>
+              Norske aksjer
+            </Text>
+            <View style={styles.flexRow}>
+              <Section title="Selskaper">
+                {companyCount?.toLocaleString()}
+              </Section>
+              <Section title="Aksjonærer">
+                {shareholderCount?.toLocaleString()}
+              </Section>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Text
+                style={[
+                  styles.sectionDescription,
+                  {
+                    color: isDarkMode ? Colors.light : Colors.dark,
+                  },
+                ]}>
+                Søk og finn alle norske aksjer og deres eiere
+              </Text>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
+      <SearchableDropdown
+        items={[{id: 1, name: 'test'}]}
+        containerStyle={{padding: 5, marginTop: 10}}
+        itemStyle={{
+          padding: 10,
+          marginTop: 2,
+          backgroundColor: '#f8f9fa',
+          borderColor: '#f8f9fa',
+          borderWidth: 1,
+          borderRadius: 5,
+        }}
+        textInputProps={{
+          placeholder: 'Søk her...',
+          underlineColorAndroid: 'transparent',
+          style: {
+            padding: 12,
+            borderWidth: 1,
+            borderColor: '#f8f9fa',
+            backgroundColor: '#f8f9fa',
+            borderRadius: 5,
+          },
+          onTextChange: (text: string) => console.log(text),
+        }}
+        onItemSelect={(item: any) => {
+          console.log(item);
+        }}></SearchableDropdown>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  h100: {
+    height: '100%',
+  },
   sectionContainer: {
     marginTop: 32,
-    paddingHorizontal: 24,
+    paddingHorizontal: 4,
   },
-  sectionTitle: {
+  appTitle: {
     fontSize: 24,
     fontWeight: '600',
+    textAlign: 'center',
+    marginTop: 48,
+    paddingHorizontal: 12,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '300',
   },
   sectionDescription: {
     marginTop: 8,
@@ -115,8 +171,13 @@ const styles = StyleSheet.create({
   textInput: {
     height: 40,
     backgroundColor: '#f8f9fa',
-    margin: 1,
+    marginTop: 12,
     padding: 1,
+  },
+  flexRow: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
 });
 
