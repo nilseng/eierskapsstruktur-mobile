@@ -8,22 +8,26 @@
  * @format
  */
 
-import React, {useEffect, useState} from 'react';
+import {debounce} from 'lodash';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   useColorScheme,
   View,
 } from 'react-native';
-import SearchableDropdown from 'react-native-searchable-dropdown';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {getCompanies} from './services/companyService';
-import {getShareholders} from './services/shareholderService';
+import {SearchablePicker} from './components/SearchablePicker';
+import {ICompany, IShareholder} from './models/models';
+import {searchCompanies, getCompanies} from './services/companyService';
+import {
+  getShareholders,
+  searchShareholders,
+} from './services/shareholderService';
 
 const Section: React.FC<{
   title: string;
@@ -59,6 +63,9 @@ const App = () => {
 
   const [companyCount, setCompanyCount] = useState<number>();
   const [shareholderCount, setShareholderCount] = useState<number>();
+  const [companies, setCompanies] = useState<ICompany[]>([]);
+  const [shareholders, setShareholders] = useState<IShareholder[]>([]);
+  const [selectedItem, setSelectedItem] = useState<any>();
 
   useEffect(() => {
     getCompanies(true).then(c => setCompanyCount(c));
@@ -111,32 +118,70 @@ const App = () => {
           </View>
         </ScrollView>
       </View>
-      <SearchableDropdown
-        items={[{id: 1, name: 'test'}]}
-        containerStyle={{padding: 5, marginTop: 10}}
-        itemStyle={{
-          padding: 10,
-          marginTop: 2,
-          backgroundColor: '#f8f9fa',
-          borderColor: '#f8f9fa',
-          borderWidth: 1,
-          borderRadius: 5,
-        }}
-        textInputProps={{
-          placeholder: 'Søk her...',
-          underlineColorAndroid: 'transparent',
-          style: {
-            padding: 12,
-            borderWidth: 1,
-            borderColor: '#f8f9fa',
-            backgroundColor: '#f8f9fa',
-            borderRadius: 5,
-          },
-          onTextChange: (text: string) => console.log(text),
-        }}
-        onItemSelect={(item: any) => {
-          console.log(item);
-        }}></SearchableDropdown>
+      <SearchablePicker
+        placeholder="Søk etter selskap..."
+        search={searchCompanies}
+        setItems={setCompanies}
+      />
+      <SearchablePicker
+        placeholder="Søk etter aksjonær..."
+        search={searchShareholders}
+        setItems={setShareholders}
+      />
+      {(companies?.length > 0 || shareholders?.length > 0) && (
+        <View
+          style={{
+            width: '100%',
+            borderBottomLeftRadius: 8,
+            borderBottomRightRadius: 8,
+            backgroundColor: isDarkMode ? Colors.dark : Colors.light,
+            padding: 8,
+          }}>
+          {companies &&
+            companies.map(c => (
+              <Text
+                key={c._id}
+                style={{
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  padding: 10,
+                  marginVertical: 4,
+                  backgroundColor: '#f8f9fa',
+                }}>
+                {c.name}
+              </Text>
+            ))}
+          {shareholders &&
+            shareholders.map(c => (
+              <Text
+                key={c._id}
+                style={{
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  padding: 10,
+                  marginVertical: 4,
+                  backgroundColor: '#f8f9fa',
+                }}>
+                {c.name}
+              </Text>
+            ))}
+        </View>
+      )}
+      {selectedItem && (
+        <View>
+          <Text
+            style={[
+              styles.sectionDescription,
+              {
+                color: isDarkMode ? Colors.light : Colors.dark,
+              },
+            ]}>
+            {Object.keys(selectedItem).map(key => (
+              <Text key={key}>{selectedItem[key]}</Text>
+            ))}
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

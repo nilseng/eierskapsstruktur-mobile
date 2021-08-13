@@ -1,4 +1,14 @@
+import { debounce } from "lodash"
+import { ICompany } from "../models/models";
+
+const baseUrl = 'https://norske-aksjer.herokuapp.com/api/company';
+
 export const getCompanies = async (count?: boolean) => {
-    const res = await fetch(`https://norske-aksjer.herokuapp.com/api/company${count ? '?count=true' : ''}`);
+    const res = await fetch(`${baseUrl}${count ? '?count=true' : ''}`);
     return res.json();
 };
+
+export const searchCompanies = async (searchTerm: string): Promise<ICompany[]> => {
+    const res = await fetch(`${baseUrl}/${searchTerm}`);
+    return res.json();
+}
