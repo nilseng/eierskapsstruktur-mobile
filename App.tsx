@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {IPopupProps, Popup} from './components/Popup';
 import {SearchablePicker} from './components/SearchablePicker';
 import {ICompany, IShareholder} from './models/models';
 import {searchCompanies, getCompanies} from './services/companyService';
@@ -32,7 +33,7 @@ import {
 const Section: React.FC<{
   title: string;
 }> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'light';
+  const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <View style={styles.sectionContainer}>
@@ -59,13 +60,15 @@ const Section: React.FC<{
 };
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'light';
+  const isDarkMode = useColorScheme() === 'dark';
 
   const [companyCount, setCompanyCount] = useState<number>();
   const [shareholderCount, setShareholderCount] = useState<number>();
   const [companies, setCompanies] = useState<ICompany[]>([]);
   const [shareholders, setShareholders] = useState<IShareholder[]>([]);
   const [selectedItem, setSelectedItem] = useState<any>();
+
+  const [popupProps, setPopupProps] = useState<IPopupProps>();
 
   useEffect(() => {
     getCompanies(true).then(c => setCompanyCount(c));
@@ -122,11 +125,13 @@ const App = () => {
         placeholder="Søk etter selskap..."
         search={searchCompanies}
         setItems={setCompanies}
+        setError={setPopupProps}
       />
       <SearchablePicker
         placeholder="Søk etter aksjonær..."
         search={searchShareholders}
         setItems={setShareholders}
+        setError={setPopupProps}
       />
       {(companies?.length > 0 || shareholders?.length > 0) && (
         <View
@@ -182,6 +187,7 @@ const App = () => {
           </Text>
         </View>
       )}
+      <Popup {...{...popupProps, setPopupProps}} />
     </SafeAreaView>
   );
 };

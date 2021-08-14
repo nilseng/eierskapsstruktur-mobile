@@ -8,7 +8,7 @@ export const getCompanies = async (count?: boolean) => {
     return res.json();
 };
 
-export const searchCompanies = async (searchTerm: string): Promise<ICompany[]> => {
+export const searchCompanies = async (searchTerm: string): Promise<ICompany[] | { error: any }> => {
     const res = await fetch(`${baseUrl}/${searchTerm}`);
     return res.json();
 }
