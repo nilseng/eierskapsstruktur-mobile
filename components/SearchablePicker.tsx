@@ -1,31 +1,37 @@
 import {DebouncedFunc} from 'lodash';
 import React, {useRef} from 'react';
+import {useContext} from 'react';
 import {StyleSheet, TextInput, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {PopupContext} from '../App';
+import {colors} from '../styles/colors';
 import {IPopupProps} from './Popup';
 
 interface IProps {
+  style: any;
   placeholder?: string;
   search: Function;
   setItems: React.Dispatch<React.SetStateAction<any[]>>;
-  setError?: Function;
 }
 
 export const SearchablePicker = ({
+  style,
   placeholder,
   search,
   setItems,
-  setError,
 }: IProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const timer = useRef<NodeJS.Timeout>();
 
+  const popupContext = useContext(PopupContext);
+
   return (
     <TextInput
       style={{
         ...styles.input,
-        backgroundColor: isDarkMode ? Colors.dark : Colors.light,
+        ...style,
+        backgroundColor: isDarkMode ? Colors.dark : '#fff',
         color: isDarkMode ? Colors.lighter : Colors.darker,
       }}
       placeholderTextColor={isDarkMode ? Colors.light : Colors.dark}
@@ -36,16 +42,16 @@ export const SearchablePicker = ({
           const res = await search(text);
           if (res && Array.isArray(res)) {
             setItems(res);
-            if (setError && res.length === 0) {
-              setError({
+            if (popupContext?.setPopupProps && res.length === 0) {
+              popupContext.setPopupProps({
                 msg: 'Could not find any results :/',
                 duration: 2000,
                 backgroundColor: 'info',
               });
             }
           } else {
-            if (setError)
-              setError({
+            if (popupContext?.setPopupProps)
+              popupContext.setPopupProps({
                 msg: 'Oh no, the search failed :(',
                 duration: 2000,
                 backgroundColor: 'warning',
@@ -61,7 +67,7 @@ export const SearchablePicker = ({
 const styles = StyleSheet.create({
   input: {
     height: 40,
-    marginVertical: 4,
+    marginBottom: 8,
     padding: 10,
   },
 });
