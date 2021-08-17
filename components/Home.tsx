@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useContext} from 'react';
 import {ScrollView, Text, View} from 'react-native';
-import {PopupContext, ThemeContext} from '../App';
+import {GlobalContext, Routes} from '../App';
 import {ICompany, IShareholder} from '../models/models';
 import {getCompanies, searchCompanies} from '../services/companyService';
 import {
@@ -19,9 +19,7 @@ export const Home = () => {
   const [companies, setCompanies] = useState<ICompany[]>([]);
   const [shareholders, setShareholders] = useState<IShareholder[]>([]);
 
-  const theme = useContext(ThemeContext);
-
-  const popupContext = useContext(PopupContext);
+  const {theme} = useContext(GlobalContext);
 
   useEffect(() => {
     getCompanies(true).then(c => setCompanyCount(c));
@@ -38,28 +36,15 @@ export const Home = () => {
             style={{
               backgroundColor: theme.backgroundColor,
             }}>
-            <Text
-              style={[
-                styles.appTitle,
-                {
-                  color: theme.text,
-                },
-              ]}>
-              Norske aksjer
-            </Text>
             <View style={styles.flexRow}>
-              {companyCount && (
-                <StatCard
-                  label="Selskaper"
-                  stat={companyCount.toLocaleString()}
-                />
-              )}
-              {shareholderCount && (
-                <StatCard
-                  label="Aksjonærer"
-                  stat={shareholderCount.toLocaleString()}
-                />
-              )}
+              <StatCard
+                label="Selskaper"
+                stat={companyCount?.toLocaleString()}
+              />
+              <StatCard
+                label="Aksjonærer"
+                stat={shareholderCount?.toLocaleString()}
+              />
             </View>
             <View style={styles.sectionContainer}>
               <Text
@@ -89,7 +74,9 @@ export const Home = () => {
       />
       {(companies?.length > 0 || shareholders?.length > 0) && (
         <>
-          {companies && <List items={companies} />}
+          {companies && (
+            <List items={companies} route={Routes.COMPANY_DETAIL} />
+          )}
           {shareholders && <List items={shareholders} />}
         </>
       )}

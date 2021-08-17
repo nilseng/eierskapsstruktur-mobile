@@ -5,7 +5,7 @@ import {colors} from '../styles/colors';
 
 interface IProps {
   label: string;
-  stat: string;
+  stat?: string;
 }
 
 export const StatCard = ({label, stat}: IProps) => {
@@ -24,13 +24,15 @@ export const StatCard = ({label, stat}: IProps) => {
         ]}>
         {label}
       </Text>
-      <Text
-        style={[
-          styles.stat,
-          {color: isDarkMode ? colors.dark.info : colors.light.info},
-        ]}>
-        {stat}
-      </Text>
+      {stat && (
+        <Text
+          style={[
+            styles.stat,
+            {color: isDarkMode ? colors.dark.info : colors.light.info},
+          ]}>
+          {stat}
+        </Text>
+      )}
     </View>
   );
 };

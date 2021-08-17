@@ -1,11 +1,8 @@
-import {DebouncedFunc} from 'lodash';
 import React, {useRef} from 'react';
 import {useContext} from 'react';
 import {StyleSheet, TextInput, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {PopupContext} from '../App';
-import {colors} from '../styles/colors';
-import {IPopupProps} from './Popup';
+import {GlobalContext} from '../App';
 
 interface IProps {
   style: any;
@@ -24,7 +21,7 @@ export const SearchablePicker = ({
 
   const timer = useRef<NodeJS.Timeout>();
 
-  const popupContext = useContext(PopupContext);
+  const {popupProps: popupContext} = useContext(GlobalContext);
 
   return (
     <TextInput

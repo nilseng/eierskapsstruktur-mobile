@@ -1,13 +1,24 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {GlobalContext, Routes} from '../App';
 
 interface IProps {
   items: {[key: string]: any; _id: string; name: string}[];
+  route?: Routes;
 }
 
-export const List = ({items}: IProps) => {
+export const List = ({items, route}: IProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+
+  const {
+    routeContext: {setRoute, setParams},
+  } = useContext(GlobalContext);
+
+  const handleTouch = (item: any) => {
+    if (setParams) setParams(item);
+    if (setRoute && route) setRoute(route);
+  };
 
   return (
     <>
@@ -18,7 +29,8 @@ export const List = ({items}: IProps) => {
             backgroundColor: isDarkMode ? Colors.darker : '#fff',
             shadowColor: isDarkMode ? '#fff' : '#000',
             ...styles.listItem,
-          }}>
+          }}
+          onTouchEnd={() => handleTouch(i)}>
           <Text
             style={{
               color: isDarkMode ? Colors.lighter : Colors.darker,

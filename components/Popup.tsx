@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useContext} from 'react';
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
-import {PopupContext} from '../App';
+import {GlobalContext} from '../App';
 import {colors} from '../styles/colors';
 
 export interface IPopupProps {
@@ -16,8 +16,9 @@ export const Popup = () => {
 
   const timer = useRef<NodeJS.Timeout>();
 
-  const {msg, duration, backgroundColor, setPopupProps} =
-    useContext(PopupContext);
+  const {
+    popupProps: {msg, duration, backgroundColor, setPopupProps},
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     if (timer.current) clearTimeout(timer.current);
