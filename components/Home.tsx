@@ -29,36 +29,29 @@ export const Home = () => {
   return (
     <>
       <View>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={{backgroundColor: theme.backgroundColor}}>
-          <View
-            style={{
-              backgroundColor: theme.backgroundColor,
-            }}>
-            <View style={styles.flexRow}>
-              <StatCard
-                label="Selskaper"
-                stat={companyCount?.toLocaleString()}
-              />
-              <StatCard
-                label="Aksjonærer"
-                stat={shareholderCount?.toLocaleString()}
-              />
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text
-                style={[
-                  styles.sectionDescription,
-                  {
-                    color: theme.text,
-                  },
-                ]}>
-                Søk og finn alle norske aksjer og deres eiere
-              </Text>
-            </View>
+        <View
+          style={{
+            backgroundColor: theme.backgroundColor,
+          }}>
+          <View style={styles.flexRow}>
+            <StatCard label="Selskaper" stat={companyCount?.toLocaleString()} />
+            <StatCard
+              label="Aksjonærer"
+              stat={shareholderCount?.toLocaleString()}
+            />
           </View>
-        </ScrollView>
+          <View style={styles.sectionContainer}>
+            <Text
+              style={[
+                styles.sectionDescription,
+                {
+                  color: theme.text,
+                },
+              ]}>
+              Søk og finn alle norske aksjer og deres eiere
+            </Text>
+          </View>
+        </View>
       </View>
       <SearchablePicker
         style={{marginHorizontal: 8, borderRadius: 32}}

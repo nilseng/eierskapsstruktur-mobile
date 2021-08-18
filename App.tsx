@@ -11,6 +11,7 @@
 import React, {useState} from 'react';
 import {
   SafeAreaView,
+  ScrollView,
   StatusBar,
   Text,
   useColorScheme,
@@ -22,6 +23,7 @@ import {Home} from './components/Home';
 import {styles} from './styles/styles';
 import {colors} from './styles/colors';
 import {CompanyDetails} from './components/CompanyDetails';
+import {ICompany, IShareholder} from './models/models';
 
 export enum Routes {
   HOME = 'home',
@@ -31,7 +33,7 @@ export interface GlobalContext {
   routeContext: {
     route?: Routes;
     setRoute?: React.Dispatch<React.SetStateAction<Routes>>;
-    params?: any;
+    params?: ICompany | IShareholder;
     setParams?: React.Dispatch<React.SetStateAction<any>>;
   };
   theme: any;
@@ -71,22 +73,24 @@ const App = () => {
           barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
         />
         <Popup />
-        <View
-          onTouchEnd={() => {
-            setRoute(Routes.HOME);
-            setParams(undefined);
-          }}>
-          <Text
-            style={[
-              styles.appTitle,
-              {
-                color: colors[colorScheme].text,
-              },
-            ]}>
-            Norske aksjer
-          </Text>
-        </View>
-        {pages[route]}
+        <ScrollView contentInsetAdjustmentBehavior="automatic">
+          <View
+            onTouchEnd={() => {
+              setRoute(Routes.HOME);
+              setParams(undefined);
+            }}>
+            <Text
+              style={[
+                styles.appTitle,
+                {
+                  color: colors[colorScheme].text,
+                },
+              ]}>
+              Norske aksjer
+            </Text>
+          </View>
+          {pages[route]}
+        </ScrollView>
       </GlobalContext.Provider>
     </SafeAreaView>
   );
