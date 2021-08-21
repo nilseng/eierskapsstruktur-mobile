@@ -54,6 +54,7 @@ const pages: {[key: string]: JSX.Element} = {
 
 const App = () => {
   const colorScheme = useColorScheme() || 'light';
+  const {height, width} = useWindowDimensions();
 
   const [popupProps, setPopupProps] = useState<IPopupProps>();
   const [route, setRoute] = useState<Routes>(Routes.HOME);
@@ -61,10 +62,10 @@ const App = () => {
 
   return (
     <SafeAreaView
-      style={[
-        {backgroundColor: colors[colorScheme].backgroundColor},
-        styles.h100,
-      ]}>
+      style={{
+        backgroundColor: colors[colorScheme].backgroundColor,
+        height: '100%',
+      }}>
       <GlobalContext.Provider
         value={{
           routeContext: {route, setRoute, params, setParams},
@@ -75,7 +76,9 @@ const App = () => {
           barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
         />
         <Popup />
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={{height: height}}>
           <View
             onTouchEnd={() => {
               setRoute(Routes.HOME);

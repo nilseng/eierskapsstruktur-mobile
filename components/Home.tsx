@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useContext} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text, useWindowDimensions, View} from 'react-native';
 import {GlobalContext, Routes} from '../App';
 import {ICompany, IShareholder} from '../models/models';
 import {getCompanies, searchCompanies} from '../services/companyService';
@@ -20,6 +20,7 @@ export const Home = () => {
   const [shareholders, setShareholders] = useState<IShareholder[]>([]);
 
   const {theme} = useContext(GlobalContext);
+  const {height, width} = useWindowDimensions();
 
   useEffect(() => {
     getCompanies(true).then(c => setCompanyCount(c));
@@ -53,18 +54,22 @@ export const Home = () => {
           </View>
         </View>
       </View>
-      <SearchablePicker
-        style={{marginHorizontal: 8, borderRadius: 32}}
-        placeholder="Søk etter selskap..."
-        search={searchCompanies}
-        setItems={setCompanies}
-      />
-      <SearchablePicker
-        style={{marginHorizontal: 8, borderRadius: 32}}
-        placeholder="...eller aksjonærer..."
-        search={searchShareholders}
-        setItems={setShareholders}
-      />
+      <View style={{paddingBottom: 12}}>
+        <SearchablePicker
+          style={{marginHorizontal: 8, borderRadius: 32}}
+          placeholder="Søk etter selskap..."
+          search={searchCompanies}
+          setItems={setCompanies}
+        />
+      </View>
+      <View style={{paddingBottom: 12}}>
+        <SearchablePicker
+          style={{marginHorizontal: 8, borderRadius: 32}}
+          placeholder="...eller aksjonærer..."
+          search={searchShareholders}
+          setItems={setShareholders}
+        />
+      </View>
       {(companies?.length > 0 || shareholders?.length > 0) && (
         <>
           {companies && (
@@ -73,6 +78,29 @@ export const Home = () => {
           {shareholders && <List items={shareholders} />}
         </>
       )}
+      <View
+        style={{
+          height,
+          width,
+          position: 'absolute',
+          top: 0,
+          zIndex: -10,
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            position: 'absolute',
+            bottom: height / 10,
+            padding: 10,
+            paddingBottom: 0,
+            color: theme.muted,
+          }}>
+          Denne appen er utviklet av Teodor Nilseng Danielsen ved PureOKRs AS.
+          All data er allerede gjort offentlig tilgjengelig av Skatteetaten
+          eller Brønnøysundsregistrene.
+        </Text>
+      </View>
     </>
   );
 };

@@ -64,7 +64,6 @@ export const SearchablePicker = ({
 const styles = StyleSheet.create({
   input: {
     height: 40,
-    marginBottom: 8,
     padding: 10,
   },
 });

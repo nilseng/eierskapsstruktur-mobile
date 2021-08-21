@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, useColorScheme, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {colors} from '../styles/colors';
 
@@ -33,6 +39,7 @@ export const StatCard = ({label, stat}: IProps) => {
           {stat}
         </Text>
       )}
+      {!stat && <ActivityIndicator />}
     </View>
   );
 };
