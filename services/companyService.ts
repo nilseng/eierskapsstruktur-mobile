@@ -29,7 +29,7 @@ export const useBrregUnit = (orgnr?: string) => {
 
     useEffect(() => {
         getBrregUnit(orgnr).then(res => setUnit(res))
-        return setUnit(undefined)
+        return () => setUnit(undefined)
     }, [orgnr])
 
     return unit;

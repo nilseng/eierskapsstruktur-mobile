@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     },
     sectionTitle: {
         fontSize: 16,
-        fontWeight: '300',
+        fontWeight: '600',
     },
     sectionDescription: {
         textAlign: 'center',

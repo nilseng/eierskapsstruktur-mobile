@@ -24,6 +24,7 @@ import {styles} from './styles/styles';
 import {colors} from './styles/colors';
 import {CompanyDetails} from './components/CompanyDetails';
 import {ICompany, IShareholder} from './models/models';
+import {useWindowDimensions} from 'react-native';
 
 export enum Routes {
   HOME = 'home',
@@ -53,6 +54,7 @@ const pages: {[key: string]: JSX.Element} = {
 
 const App = () => {
   const colorScheme = useColorScheme() || 'light';
+
   const [popupProps, setPopupProps] = useState<IPopupProps>();
   const [route, setRoute] = useState<Routes>(Routes.HOME);
   const [params, setParams] = useState<any>();
@@ -83,7 +85,7 @@ const App = () => {
               style={[
                 styles.appTitle,
                 {
-                  color: colors[colorScheme].text,
+                  color: colors[colorScheme].primary,
                 },
               ]}>
               Norske aksjer
