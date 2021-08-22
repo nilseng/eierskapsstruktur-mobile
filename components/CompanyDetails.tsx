@@ -1,131 +1,115 @@
-import React, {useContext, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-
-import {GlobalContext} from '../App';
-import {useBrregUnit} from '../services/companyService';
-import {jsxify} from '../utils/jsxify';
-import {OwnershipsList} from './OwnershipsList';
-
-import {styles as commonStyles} from '../styles/styles';
+import {faChevronCircleDown, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faBuilding,
-  faChevronCircleDown,
-  faInfo,
-  faUsers,
-} from '@fortawesome/free-solid-svg-icons';
+import React, {useContext, useState} from 'react';
+import {Button, Text, View} from 'react-native';
+import {GlobalContext, Routes} from '../App';
+import {ICompany, IOwnership, IShareholder} from '../models/models';
+import {getCompany} from '../services/companyService';
 
-export const CompanyDetails = () => {
+interface IProps {
+  ownership: IOwnership;
+  index: number;
+  shareholder: IShareholder;
+}
+
+export const CompanyDetails = ({ownership, index, shareholder}: IProps) => {
   const {
-    routeContext: {params: company},
     theme,
+    routeContext: {setParams, setRoute},
   } = useContext(GlobalContext);
 
-  const unit = useBrregUnit(company?.orgnr);
-
-  const [isBrregInfoVisible, setIsBrregInfoVisible] = useState(false);
+  const [showDetails, setShowDetails] = useState<boolean>(false);
 
   return (
-    <View style={styles.container}>
-      {company && (
-        <View style={{display: 'flex', alignItems: 'center', marginTop: 16}}>
-          <View
-            style={{display: 'flex', flexDirection: 'row', marginBottom: 8}}>
-            <FontAwesomeIcon
-              icon={faBuilding}
-              color={theme.primary}
-              style={{marginRight: 8}}
-            />
-            <Text
-              key={'name'}
-              style={{
-                color: theme.text,
-                ...commonStyles.highlight,
-                marginRight: 8,
-              }}>
-              {company.name}
-            </Text>
-            <Text key={'orgnr'} style={{color: theme.muted}}>
-              ({company.orgnr})
-            </Text>
-          </View>
-          <Text key={'stocks'} style={{color: theme.text}}>
-            {company.stocks?.toLocaleString()} aksjer
+    <View
+      key={ownership._id}
+      style={{
+        backgroundColor:
+          index % 2 ? theme.backgroundColor : theme.backgroundColorAccent,
+        borderRadius: 4,
+      }}>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 8,
+        }}>
+        <View>
+          <Text
+            style={{
+              color: theme.text,
+            }}>
+            {ownership.company?.name}
           </Text>
         </View>
-      )}
-      {company && (
-        <>
+        <View onTouchEnd={() => setShowDetails(s => !s)}>
+          <FontAwesomeIcon
+            icon={faChevronCircleDown}
+            color={theme.info}
+            size={18}
+            style={{marginRight: 8}}
+          />
+        </View>
+      </View>
+      {showDetails && ownership.company && (
+        <View
+          style={{
+            paddingLeft: 16,
+            paddingBottom: 16,
+            backgroundColor:
+              index % 2 ? theme.backgroundColor : theme.backgroundColorAccent,
+          }}>
+          <Text
+            style={{
+              color: theme.text,
+              marginVertical: 1,
+            }}>
+            Har {ownership.stocks.toLocaleString()} aksjer
+            {ownership.company?.stocks && (
+              <>
+                {' '}
+                og en eierandel på{' '}
+                {((ownership.stocks / ownership.company.stocks) * 100).toFixed(
+                  2,
+                )}
+                %
+              </>
+            )}
+          </Text>
           <View
             style={{
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-              marginTop: 32,
+              marginRight: 8,
+              marginTop: 8,
+            }}
+            onTouchEnd={async () => {
+              if (setParams && setRoute && ownership.company) {
+                setRoute(Routes.COMPANY_OVERVIEW);
+                setParams(ownership.company);
+              }
             }}>
             <FontAwesomeIcon
               icon={faUsers}
               color={theme.secondary}
-              style={{marginRight: 8}}
-            />
-            <Text
-              style={{
-                ...commonStyles.sectionTitle,
-                marginVertical: 16,
-                color: theme.text,
-              }}>
-              Aksjonærer
-            </Text>
-          </View>
-          <OwnershipsList company={company} />
-        </>
-      )}
-      {unit && theme && (
-        <View
-          style={{
-            marginTop: 32,
-            backgroundColor: theme.backgroundColorAccent,
-            borderRadius: 8,
-            padding: 8,
-          }}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <FontAwesomeIcon
-              icon={faInfo}
+              size={18}
               style={{marginRight: 4}}
-              color={theme.secondary}
             />
             <Text
               style={{
-                color: theme.text,
+                color: theme.muted,
                 fontWeight: 'bold',
-                marginVertical: 16,
+                marginVertical: 1,
               }}>
-              Om selskapet
+              Se alle aksjonærer
             </Text>
-            <View onTouchEnd={() => setIsBrregInfoVisible(s => !s)}>
-              <FontAwesomeIcon
-                icon={faChevronCircleDown}
-                color={theme.info}
-                size={18}
-                style={{marginLeft: 8}}
-              />
-            </View>
           </View>
-          {isBrregInfoVisible && jsxify(unit, theme, 'root')}
         </View>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 4,
-  },
-});

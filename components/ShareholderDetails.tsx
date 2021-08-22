@@ -1,15 +1,10 @@
-import {
-  faArrowDown,
-  faArrowRight,
-  faChevronCircleDown,
-  faChevronDown,
-} from '@fortawesome/free-solid-svg-icons';
+import {faChevronCircleDown, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useContext, useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
-import {GlobalContext} from '../App';
+import React, {useContext, useState} from 'react';
+import {Button, Text, View} from 'react-native';
+import {GlobalContext, Routes} from '../App';
 import {ICompany, IOwnership} from '../models/models';
-import {titleCase} from '../utils/titleCase';
+import {getCompany} from '../services/companyService';
 
 interface IProps {
   ownership: IOwnership;
@@ -17,8 +12,11 @@ interface IProps {
   company: ICompany;
 }
 
-export const OwnershipsDetails = ({ownership, index, company}: IProps) => {
-  const {theme} = useContext(GlobalContext);
+export const ShareholderDetails = ({ownership, index, company}: IProps) => {
+  const {
+    theme,
+    routeContext: {setParams, setRoute},
+  } = useContext(GlobalContext);
 
   const [showDetails, setShowDetails] = useState<boolean>(false);
 
@@ -38,7 +36,13 @@ export const OwnershipsDetails = ({ownership, index, company}: IProps) => {
           alignItems: 'center',
           padding: 8,
         }}>
-        <View>
+        <View
+          onTouchEnd={() => {
+            if (setRoute && setParams && ownership.shareholder) {
+              setRoute(Routes.SHAREHOLDER_OVERVIEW);
+              setParams(ownership.shareholder);
+            }
+          }}>
           <Text
             style={{
               color: theme.text,
@@ -88,6 +92,44 @@ export const OwnershipsDetails = ({ownership, index, company}: IProps) => {
               </>
             )}
           </Text>
+          {ownership.shareholder?.orgnr &&
+            (ownership.shareholder.name.includes(' AS') ||
+              ownership.shareholder.name
+                .toLowerCase()
+                .includes('aksjeselskap')) && (
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: 8,
+                  marginTop: 8,
+                }}
+                onTouchEnd={async () => {
+                  if (setParams && ownership.shareholder?.orgnr) {
+                    const company = await getCompany(
+                      ownership.shareholder.orgnr,
+                    );
+                    setParams(company);
+                  }
+                }}>
+                <FontAwesomeIcon
+                  icon={faUsers}
+                  color={theme.secondary}
+                  size={18}
+                  style={{marginRight: 4}}
+                />
+                <Text
+                  style={{
+                    color: theme.muted,
+                    fontWeight: 'bold',
+                    marginVertical: 1,
+                  }}>
+                  Aksjonærer
+                </Text>
+              </View>
+            )}
         </View>
       )}
     </View>

@@ -1,30 +1,23 @@
-import React, {useContext, useState} from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-import {GlobalContext} from '../App';
+import React from 'react';
+import {ActivityIndicator, ScrollView, useWindowDimensions} from 'react-native';
 import {ICompany} from '../models/models';
-import {useGetOwnerships} from '../services/ownershipService';
-import {OwnershipsDetails} from './OwnershipDetails';
+import {useGetCompanyOwnerships} from '../services/ownershipService';
+import {ShareholderDetails} from './ShareholderDetails';
 
 interface IProps {
   company: ICompany;
 }
 
-export const OwnershipsList = ({company}: IProps) => {
+export const ShareholderList = ({company}: IProps) => {
   const {height} = useWindowDimensions();
 
-  const ownerships = useGetOwnerships(company);
+  const ownerships = useGetCompanyOwnerships(company);
 
   return (
     <ScrollView style={{maxHeight: height / 3, height: height / 3}}>
       {ownerships ? (
         ownerships.map((o, i) => (
-          <OwnershipsDetails
+          <ShareholderDetails
             key={o._id}
             ownership={o}
             index={i}

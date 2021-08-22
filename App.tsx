@@ -22,20 +22,24 @@ import {IPopupProps, Popup} from './components/Popup';
 import {Home} from './components/Home';
 import {styles} from './styles/styles';
 import {colors} from './styles/colors';
-import {CompanyDetails} from './components/CompanyDetails';
+import {CompanyOverview} from './components/CompanyOverview';
 import {ICompany, IShareholder} from './models/models';
 import {useWindowDimensions} from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faHome} from '@fortawesome/free-solid-svg-icons';
+import {ShareholderOverview} from './components/ShareholderOverview';
 
 export enum Routes {
   HOME = 'home',
-  COMPANY_DETAIL = 'company_detail',
+  COMPANY_OVERVIEW = 'company_overview',
+  SHAREHOLDER_OVERVIEW = 'shareholder_overview',
 }
 export interface GlobalContext {
   routeContext: {
     route?: Routes;
     setRoute?: React.Dispatch<React.SetStateAction<Routes>>;
     params?: ICompany | IShareholder;
-    setParams?: React.Dispatch<React.SetStateAction<any>>;
+    setParams?: React.Dispatch<React.SetStateAction<ICompany | IShareholder>>;
   };
   theme: any;
   popupProps: IPopupProps;
@@ -49,7 +53,8 @@ export const GlobalContext = React.createContext<GlobalContext>({
 
 const pages: {[key: string]: JSX.Element} = {
   [Routes.HOME]: <Home />,
-  [Routes.COMPANY_DETAIL]: <CompanyDetails />,
+  [Routes.COMPANY_OVERVIEW]: <CompanyOverview />,
+  [Routes.SHAREHOLDER_OVERVIEW]: <ShareholderOverview />,
 };
 
 const App = () => {
@@ -95,6 +100,14 @@ const App = () => {
             </Text>
           </View>
           {pages[route]}
+          <View
+            style={{position: 'absolute', top: 0, paddingHorizontal: 16}}
+            onTouchEnd={() => {
+              setRoute(Routes.HOME);
+              setParams(undefined);
+            }}>
+            <FontAwesomeIcon icon={faHome} color={colors[colorScheme].muted} />
+          </View>
         </ScrollView>
       </GlobalContext.Provider>
     </SafeAreaView>

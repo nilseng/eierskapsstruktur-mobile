@@ -73,9 +73,11 @@ export const Home = () => {
       {(companies?.length > 0 || shareholders?.length > 0) && (
         <>
           {companies && (
-            <List items={companies} route={Routes.COMPANY_DETAIL} />
+            <List items={companies} route={Routes.COMPANY_OVERVIEW} />
           )}
-          {shareholders && <List items={shareholders} />}
+          {shareholders && (
+            <List items={shareholders} route={Routes.SHAREHOLDER_OVERVIEW} />
+          )}
         </>
       )}
       <View
@@ -97,8 +99,8 @@ export const Home = () => {
             color: theme.muted,
           }}>
           Denne appen er utviklet av Teodor Nilseng Danielsen ved PureOKRs AS.
-          All data er allerede gjort offentlig tilgjengelig av Skatteetaten
-          eller Brønnøysundsregistrene.
+          All data er gjort offentlig tilgjengelig av Skatteetaten eller
+          Brønnøysundsregistrene.
         </Text>
       </View>
     </>

@@ -4,6 +4,11 @@ import { ICompany } from "../models/models";
 const baseUrl = 'https://norske-aksjer.herokuapp.com/api/company';
 const brregUrl = 'https://data.brreg.no/enhetsregisteret/api/enheter';
 
+export const getCompany = async (orgnr: string) => {
+    const res = await fetch(`${baseUrl}?orgnr=${orgnr}`);
+    return res.json()
+}
+
 export const getCompanies = async (count?: boolean) => {
     const res = await fetch(`${baseUrl}${count ? '?count=true' : ''}`);
     return res.json();
