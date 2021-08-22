@@ -31,6 +31,7 @@ export interface IOwnership {
     shareHolderId: string
     shareClass: string
     stocks: number
+    year: number
     company?: ICompany
     shareholder?: IShareholder
 }

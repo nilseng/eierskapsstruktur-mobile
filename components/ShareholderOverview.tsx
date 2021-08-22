@@ -1,18 +1,21 @@
 import {faBuilding, faUser} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {GlobalContext} from '../App';
 import {IShareholder} from '../models/models';
 
 import {styles as commonStyles} from '../styles/styles';
 import {CompanyList} from './CompanyList';
+import {YearSelector} from './YearSelector';
 
 export const ShareholderOverview = () => {
   const {
     routeContext: {params: shareholder},
     theme,
   } = useContext(GlobalContext);
+
+  const [year, setYear] = useState<2019 | 2020>(2020);
 
   return (
     <View style={styles.container}>
@@ -40,6 +43,7 @@ export const ShareholderOverview = () => {
               </Text>
             )}
           </View>
+          <YearSelector year={year} setYear={setYear} />
         </View>
       )}
       {shareholder && (
@@ -66,7 +70,7 @@ export const ShareholderOverview = () => {
               Aksjeselskaper
             </Text>
           </View>
-          <CompanyList shareholder={shareholder as IShareholder} />
+          <CompanyList shareholder={shareholder as IShareholder} year={year} />
         </>
       )}
     </View>

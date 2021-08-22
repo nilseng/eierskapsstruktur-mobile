@@ -16,6 +16,7 @@ export const ShareholderDetails = ({ownership, index, company}: IProps) => {
   const {
     theme,
     routeContext: {setParams, setRoute},
+    popupProps: {setPopupProps},
   } = useContext(GlobalContext);
 
   const [showDetails, setShowDetails] = useState<boolean>(false);
@@ -107,11 +108,21 @@ export const ShareholderDetails = ({ownership, index, company}: IProps) => {
                   marginTop: 8,
                 }}
                 onTouchEnd={async () => {
-                  if (setParams && ownership.shareholder?.orgnr) {
+                  if (setParams && setRoute && ownership.shareholder?.orgnr) {
+                    console.log(ownership);
                     const company = await getCompany(
                       ownership.shareholder.orgnr,
                     );
-                    setParams(company);
+                    if (company.error) {
+                      if (setPopupProps)
+                        setPopupProps({
+                          msg: 'Fant ikke selskapet :(',
+                          backgroundColor: 'info',
+                          duration: 3000,
+                        });
+                    } else {
+                      setParams(company);
+                    }
                   }
                 }}>
                 <FontAwesomeIcon

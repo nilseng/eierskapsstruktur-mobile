@@ -14,12 +14,15 @@ import {
   faInfo,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
+import {YearSelector} from './YearSelector';
 
 export const CompanyOverview = () => {
   const {
     routeContext: {params: company},
     theme,
   } = useContext(GlobalContext);
+
+  const [year, setYear] = useState<2019 | 2020>(2020);
 
   const unit = useBrregUnit(company?.orgnr);
 
@@ -50,8 +53,9 @@ export const CompanyOverview = () => {
             </Text>
           </View>
           <Text key={'stocks'} style={{color: theme.text}}>
-            {company.stocks?.toLocaleString()} aksjer
+            {company.stocks?.toLocaleString()} aksjer i 2020
           </Text>
+          <YearSelector year={year} setYear={setYear} />
         </View>
       )}
       {company && (
@@ -78,7 +82,7 @@ export const CompanyOverview = () => {
               Aksjonærer
             </Text>
           </View>
-          <ShareholderList company={company} />
+          <ShareholderList company={company} year={year} />
         </>
       )}
       {unit && theme && (

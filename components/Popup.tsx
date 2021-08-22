@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useContext} from 'react';
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {GlobalContext} from '../App';
-import {colors} from '../styles/colors';
 
 export interface IPopupProps {
   setPopupProps?: Function;
@@ -18,6 +17,7 @@ export const Popup = () => {
 
   const {
     popupProps: {msg, duration, backgroundColor, setPopupProps},
+    theme,
   } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -32,8 +32,8 @@ export const Popup = () => {
       style={{
         ...styles.popup,
         backgroundColor: backgroundColor
-          ? colors[colorScheme][backgroundColor]
-          : 'warning',
+          ? theme[backgroundColor]
+          : theme.warning,
       }}>
       <Text style={styles.popupText}>{msg}</Text>
     </View>

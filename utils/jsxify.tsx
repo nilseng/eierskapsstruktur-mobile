@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View} from 'react-native';
+import {titleCase} from './titleCase';
 
 export const jsxify = (o: any, theme: any, parent?: string) => {
   return (
@@ -9,12 +10,12 @@ export const jsxify = (o: any, theme: any, parent?: string) => {
         typeof o[key] === 'number' ||
         typeof o[key] === 'boolean' ? (
           <Text key={'leaf' + parent + key} style={{color: theme.text}}>
-            {key}: {o[key] + ''}
+            {titleCase(key)}: {o[key] + ''}
           </Text>
         ) : (
           <View key={'key' + parent + key}>
             <Text style={{color: theme.text, marginTop: 4}}>
-              {key.charAt(0).toUpperCase() + key.slice(1)}:
+              {titleCase(key)}:
             </Text>
             {jsxify(o[key], theme, key)}
           </View>
