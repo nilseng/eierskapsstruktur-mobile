@@ -109,7 +109,6 @@ export const ShareholderDetails = ({ownership, index, company}: IProps) => {
                 }}
                 onTouchEnd={async () => {
                   if (setParams && setRoute && ownership.shareholder?.orgnr) {
-                    console.log(ownership);
                     const company = await getCompany(
                       ownership.shareholder.orgnr,
                     );
