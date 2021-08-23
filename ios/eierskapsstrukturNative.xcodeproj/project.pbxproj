@@ -145,7 +145,6 @@
 				4E12E3A6CE1903E30D746296 /* Pods-eierskapsstrukturNative-eierskapsstrukturNativeTests.debug.xcconfig */,
 				73A31EA56DBB1824FD7B31C5 /* Pods-eierskapsstrukturNative-eierskapsstrukturNativeTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -485,6 +484,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G5SP5B8796;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = eierskapsstrukturNative/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -511,6 +511,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G5SP5B8796;
 				INFOPLIST_FILE = eierskapsstrukturNative/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
